@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>聚餐分帳器</title>
+<style>
+  body { font-family: system-ui, "PingFang TC", sans-serif; max-width: 420px; margin: 32px auto; padding: 0 16px; line-height: 1.6; }
+  h1 { font-size: 28px; }
+  label { display: block; margin: 12px 0; }
+  input[type=number] { width: 100%; font-size: 18px; padding: 8px; box-sizing: border-box; }
+  #result { margin-top: 20px; padding: 16px; border: 1px solid #ccc; border-radius: 8px; font-size: 18px; }
+</style>
+</head>
+<body>
+<h1>聚餐分帳器</h1>
+<label>總金額（元）<input id="total" type="number" min="0" value="1000"></label>
+<label>人數<input id="people" type="number" min="1" value="3"></label>
+<label><input id="fee" type="checkbox"> 加 10% 服務費</label>
+<div id="result"></div>
+<script>
+  function update() {
+    const people = Math.max(1, Math.floor(+document.getElementById("people").value || 1));
+    let total = Math.round(+document.getElementById("total").value || 0);
+    if (document.getElementById("fee").checked) total = Math.round(total * 1.1);
+    const each = Math.floor(total / people);
+    const payer = total - each * (people - 1);
+    document.getElementById("result").innerHTML = payer === each
+      ? `總額 ${total} 元，每人 ${each} 元`
+      : `總額 ${total} 元<br>付錢的人 ${payer} 元（含零頭），其他人各 ${each} 元`;
+  }
+  document.querySelectorAll("input").forEach((el) => el.addEventListener("input", update));
+  update();
+</script>
+</body>
+</html>
